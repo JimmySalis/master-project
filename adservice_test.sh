@@ -27,7 +27,7 @@ install_istio(){
 		# EOF
 
 		cd ~
-		istioctl manifest apply -f ./microservices-demo/release/currencyservices/currency-overlay-config.yaml <<-EOF
+		istioctl manifest apply -f ./microservices-demo/release/adservices/adservice-overlay-config.yaml <<-EOF
 		yes
 		EOF
 
@@ -47,7 +47,7 @@ echo Waiting for uninstall to complete..............
 
 install_linkerd(){
 
-	kubectl apply -f ./microservices-demo/release/currencyservices/currency-cpu-1.yaml
+	kubectl apply -f ./microservices-demo/release/adservices/adservice-cpu-1.yaml
 
 	curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/install | sh
 	#
@@ -83,7 +83,7 @@ install_linkerd(){
 	echo "Waiting again 1 minute for pods to set up..."
 	sleep 60
 
-	kubectl delete -f ./microservices-demo/release/currencyservices/currency-cpu-1.yaml
+	kubectl delete -f ./microservices-demo/release/adservices/adservice-cpu-1.yaml
 
 }
 
@@ -100,13 +100,13 @@ uninstall_linkerd(){
 }
 
 run_tests_cpu() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP CPU NO SM $repeat
 
 
 		echo installing deployments...
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-cpu-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-cpu-$repeat.yaml
 
 
 
@@ -173,12 +173,12 @@ EOF
 }
 
 run_tests_mem() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP MEM NO SM $repeat
 
 		echo installing deployments...
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-mem-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-mem-$repeat.yaml
 
 
 		echo waiting for deployments to complete........
@@ -244,11 +244,11 @@ EOF
 }
 
 run_tests_mem_cpu() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP MEM CPU NO SM $repeat
 
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-mem-cpu-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-mem-cpu-$repeat.yaml
 
 		echo waiting for deployments to complete........
 
@@ -311,13 +311,13 @@ EOF
 }
 
 run_tests_cpu_istio() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP CPU ISTIO $repeat
 
 		install_istio
 
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-cpu-istio-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-cpu-istio-$repeat.yaml
 
 		echo waiting for deployments to complete........
 
@@ -384,13 +384,13 @@ EOF
 }
 
 run_tests_mem_istio() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP ISTIO MEM $repeat
 
 		install_istio
 
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-mem-istio-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-mem-istio-$repeat.yaml
 
 
 		echo waiting for deployments to complete........
@@ -459,13 +459,13 @@ EOF
 }
 
 run_tests_mem_cpu_istio() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP MEM CPU $repeat
 
 		install_istio
 
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-mem-cpu-istio-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-mem-cpu-istio-$repeat.yaml
 
 
 		echo waiting for deployments to complete........
@@ -504,7 +504,7 @@ run_tests_mem_cpu_istio() {
 
 		uninstall_istio
 
-		kubectl delete -f ./microservices-demo/release/currencyservices/currency-mem-cpu-istio-$repeat.yaml
+		kubectl delete -f ./microservices-demo/release/adservices/adservice-mem-cpu-istio-$repeat.yaml
 
 
 		NUM_NODES=$(kubectl get nodes -o json|jq -r '.items[]|select(.status.conditions[].type=="Ready")|select(.spec.taints|not).metadata.name' | wc -l)
@@ -531,13 +531,13 @@ EOF
 }
 
 run_tests_cpu_linkerd() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP LINKERD CPU $repeat
 
 
 		echo installing deployments...
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-cpu-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-cpu-$repeat.yaml
 
 		echo waiting for deployments to complete........
 
@@ -606,12 +606,12 @@ EOF
 }
 
 run_tests_mem_linkerd() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP LINKERD MEM $repeat
 
 		echo installing deployments...
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-mem-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-mem-$repeat.yaml
 
 		echo waiting for deployments to complete........
 
@@ -678,11 +678,11 @@ EOF
 }
 
 run_tests_mem_cpu_linkerd() {
-		for repeat in 1 2 3 4 5; do
+		for repeat in 1 4; do
 
 		echo ON LOOP MEM CPU LINKERD $repeat
 
-		kubectl apply -f ./microservices-demo/release/currencyservices/currency-mem-cpu-$repeat.yaml
+		kubectl apply -f ./microservices-demo/release/adservices/adservice-mem-cpu-$repeat.yaml
 
 		echo waiting for deployments to complete........
 
