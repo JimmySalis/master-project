@@ -1,0 +1,36 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+spec:
+  components:
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: true
+        k8s:
+          service:
+            ports:
+            - name: http2
+              nodePort: 30425
+              port: 80
+              protocol: TCP
+              targetPort: 8080
+            - name: https
+              nodePort: 30080
+              port: 443
+              protocol: TCP
+              targetPort: 8443
+            - name: http
+              nodePort: 30001
+              port: 15000
+              protocol: TCP
+              targetPort: 9555
+  addonComponents:
+    prometheus:
+      enabled: false
+  values:
+    sidecarInjectorWebhook:
+      enableNamespacesByDefault: true
+    gateways:
+      istio-egressgateway:
+        enabled: false
